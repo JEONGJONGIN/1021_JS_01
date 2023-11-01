@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../rsp.app/css/style.css">
+  <title>Document</title>
+</head>
+<body>
+  <!-- h1のタグを書く -->
+  <h1 class="head">RCP  Contest <br>(じゃんけんぽん対決)</h1>
+
+  <div class="container" id="cpu">
+    <div class="container_1">
+      <img class="image src1" id="cpu_rsp" src="img/rock.png" alt="">
+      <img class="image src2" id="cpu_s" src="img/scissors.png" alt="">
+      <img class="image src3" id="cpu_p" src="img/paper.png" alt="">
+    </div>
+  </div>
+
+  <div class="vs"><h2 class="vs_1 vs_cpu">CPU</h2><h1 class="score_02 score_Cpu" id="Sc cpuSc">0</h1>
+    <h2 class="vs_1 vs_vs">VS</h2>
+    <h1 class="score_02 score_User" id="Sc userSc">0</h1><h2 class="vs_1 vs_you">YOU</h2> 
+  </div>
+
+  <div class="button">
+    <input type="image" src="img/rock.png" alt="" id= "rock" class="btn btn_r">
+    <input type="image" src="img/scissors.png" alt="" id= "scissors" class="btn btn_s">
+    <input type="image" src="img/paper.png" alt="" id= "paper" class="btn btn_p">
+    <input type="image" src="img/reset.png" alt="" id= "reset" class="btn">
+  </div>
+
+  <div class="fruits">
+    <h1 class="fruits_01" id="fruits_1">結果はこちら</h1>
+
+  <!-- jQueryのjsのコードを先に読み込む -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- jsを紐づける -->
+<script src="../rsp.app/js/rsp.js"></script>
+</body>
+</html>
