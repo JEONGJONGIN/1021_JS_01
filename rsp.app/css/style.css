@@ -10,6 +10,17 @@
   position: relative;
   /* visibility: hidden; 表示しないが場所は取っておく */
 }
+.result-hand{
+  /* display:none; */
+  visibility: hidden;
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+}
 
 .image{
   height: 200px;

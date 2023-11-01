@@ -1,17 +1,11 @@
-// const $computer = document.querySelector('#computer')
-// const $score = document.querySelector('#sc')
-// const $rock = document.querySelector('#rock')
-// const $scissor = document.querySelector('#scissor')
-// const $paper = document.querySelector('#paper') 
-
 // var imgRsp = document.querySelector("#cpu_r");
 
 // const imagePaths = ["img/rock.png", "img/scissors.png", "img/paper.png"];
 
 // let currentImageIndex = 0;
 
-// // 이미지 요소 선택
-// const image = document.getElementById("#cpu_rsp");
+// // 이미지 요소 선택 getElementById는 # 이 필요없음
+// const image = document.getElementById("cpu_rsp");
 
 // // 이미지 변경 함수
 // function changeImage() {
@@ -30,220 +24,111 @@
 // 2초마다 이미지 변경 함수를 호출하여 이미지를 스위치
 // setInterval(changeImage, 2000); // 2000 밀리초(2초)마다 실행
 
+function createRSPImageElement(imageName){
+  const rspImage = document.createElement('img')
+  rspImage.setAttribute("src","img/" + imageName + ".png")
+  rspImage.style.width = "200px"
+  rspImage.style.height= "200px"
+  return rspImage
+}
 
+const ROCK = {img:"img/rock.png"}
+const SCISSORS = {img:"img/scissors.png"}
+const PAPER = {img:"img/paper.png"}
+ROCK.beat = SCISSORS
+SCISSORS.beat = PAPER
+PAPER.beat = ROCK
 
-// const scissorsImg = document.querySelector("#cpu_s");
-// console.log(scissorsImg)
-// scissorsImg.src = "img/scissors.png";
-// scissorsImg.width = "200px";
-// scissorsImg.height = "200px";
+let winCount = 0
+let loseCount = 0
+let drawCount = 0
 
-// const paperImg = document.querySelector("#cpu_p");
-// console.log(paperImg)
-// paperImg.src = "img/paper.png";
-// paperImg.width = "200px";
-// paperImg.height = "200px";
+const hands = [ROCK, SCISSORS, PAPER]
 
-// setInterval(() => {
-//   if(rockImg === rspX.rock){
-//     rockImg = rspX.scissors;
-//   } else if(rockImg === rspX.scissors){
-//     rockImg = rspX.paper;
-//   } else if(rockImg === rspX.paper){
-//     rockImg = rspX.rock;
-//   }
-// },50);
+function judgeRSP(myHand, cpuHand){
+  if(myHand === cpuHand){
+    return 'drow'
+  }
+  if(myHand.beat === cpuHand){
+    return 'win'
+  }
+  return 'lose'
+}
+function getCpuHand(){
+  const random = Math.floor(Math.random() * 3);
+  const cpuHand = hands[random]
+  return cpuHand
+}
+let setTimeoutId = 0
+function generateRSPProcedure(hand){
+  return function(){
+    const cpuHand = getCpuHand()
+
+    //対象クラスを持つh1を習得する
+    var userScore = document.querySelector('.score_User')
+    var cpuScore = document.querySelector('.score_Cpu')
+
+    // var imgRock = createRSPImageElement("rock")
+    // var imgScissors = createRSPImageElement("scissors") 
+    // var imgPaper = createRSPImageElement("paper")
+
+    const result = judgeRSP(hand, cpuHand)
+    
+    $(".animation_container").css("visibility", "hidden");
+    $(".result-hand")
+      .css("visibility", "unset")
+      .attr("src", cpuHand.img)
+    if(result === 'drow'){
+      console.log("Drow")
+      $("#fruits_1").html("Drow")
+    } else if(result === 'win'){  
+      winCount += 1
+      userScore.textContent = winCount
+      console.log("YouWin")
+      $("#fruits_1").html("YouWin")
+    } else if(result === 'lose'){
+      loseCount += 1
+      cpuScore.textContent = loseCount
+      console.log("YouLose")
+      $("#fruits_1").html("YouLose")
+    }
+    clearTimeout(setTimeoutId)
+    setTimeoutId = setTimeout(()=>{
+      $(".result-hand")
+        .css("visibility", "hidden")
+      $(".animation_container").css("visibility", "unset");
+    }, 2000)
+  }
+}
 
 //グーのボタンを押した場合
-$("#rock").on("click", function(){
-  var randum = Math.floor(Math.random() * 3);
-
-  console.log(randum, "randum_box")
-
-  //対象クラスを持つh1を習得する
-  var userSc = document.querySelector('.score_User')
-  var cpuSc = document.querySelector('.score_Cpu')
-  // 対象クラスの文字を習得する
-  var stringNumUser = userSc.textContent
-  var stringNumCpu = cpuSc.textContent
-  // 文字を数字化する
-  var numUser = parseInt(stringNumUser, 10)
-  var numCpu = parseInt(stringNumCpu, 10)
-
-  var imgRock = $("<img>")
-  imgRock.attr("src","img/rock.png")
-  imgRock.css("width", "200px")
-  imgRock.css("height", "200px") 
-
-  var imgScissors = $("<img>")
-  imgScissors.attr("src","img/scissors.png")
-  imgScissors.css("width", "200px")
-  imgScissors.css("height", "200px") 
-
-  var imgPaper = $("<img>")
-  imgPaper.attr("src","img/paper.png")
-  imgPaper.css("width", "200px")
-  imgPaper.css("height", "200px") 
-
-
-  if(randum === 0){
-    $("#cpu").html("")
-    $("#cpu").append(imgRock)
-    console.log("Drow")
-    $("#fruits_1").html("Drow")
-  } else if(randum === 1){
-    $("#cpu").html("");
-    $("#cpu").append(imgScissors)
-      var resultUser = numUser + 1
-    userSc.textContent = resultUser
-    console.log("YouWin")
-    $("#fruits_1").html("YouWin")
-  } else if(randum === 2){
-    $("#cpu").html("");
-    $("#cpu").append(imgPaper)
-    var resultCpu = numCpu + 1
-    cpuSc.textContent = resultCpu
-    console.log("YouLose")
-    $("#fruits_1").html("YouLose")
-  }
-})
+$("#rock").on("click", generateRSPProcedure(ROCK))
 
 //チョキのボタンを押した場合
-$("#scissors").on("click", function(){
-  var randum = Math.floor(Math.random() * 3);
-
-  console.log(randum, "randum_box")
-
-  //対象クラスを持つh1を習得する
-  var userSc = document.querySelector('.score_User')
-  var cpuSc = document.querySelector('.score_Cpu')
-  // 対象クラスの文字を習得する
-  var stringNumUser = userSc.textContent
-  var stringNumCpu = cpuSc.textContent
-  // 文字を数字化する
-  var numUser = parseInt(stringNumUser, 10)
-  var numCpu = parseInt(stringNumCpu, 10)
-
-  var imgRock = $("<img>")
-  imgRock.attr("src","img/rock.png")
-  imgRock.css("width", "200px")
-  imgRock.css("height", "200px") 
-
-  var imgScissors = $("<img>")
-  imgScissors.attr("src","img/scissors.png")
-  imgScissors.css("width", "200px")
-  imgScissors.css("height", "200px") 
-
-  var imgPaper = $("<img>")
-  imgPaper.attr("src","img/paper.png")
-  imgPaper.css("width", "200px")
-  imgPaper.css("height", "200px") 
-
-  if(randum === 0){
-    $("#cpu").html("")
-    $("#cpu").append(imgRock)
-    var resultCpu = numCpu + 1
-    cpuSc.textContent = resultCpu
-    console.log("YouLose")
-    $("#fruits_1").html("YouLose")
-  } else if(randum === 1){
-    $("#cpu").html("")
-    $("#cpu").append(imgScissors)
-    console.log("Drow")
-    $("#fruits_1").html("Drow")
-  } else if(randum === 2){
-    $("#cpu").html("")
-    $("#cpu").append(imgPaper)
-    var resultUser = numUser + 1
-    userSc.textContent = resultUser
-    console.log("YouWin")
-    $("#fruits_1").html("YouWin")
-  }
-})
+$("#scissors").on("click",generateRSPProcedure(SCISSORS))
 
 //パーのボタンを押した場合
-$("#paper").on("click", function(){
-  var randum = Math.floor(Math.random() * 3);
-
-  console.log(randum, "randum_box")
-
-  //対象クラスを持つh1を習得する
-  var userSc = document.querySelector('.score_User')
-  var cpuSc = document.querySelector('.score_Cpu')
-  // 対象クラスの文字を習得する
-  var stringNumUser = userSc.textContent
-  var stringNumCpu = cpuSc.textContent
-  // 文字を数字化する
-  var numUser = parseInt(stringNumUser, 10)
-  var numCpu = parseInt(stringNumCpu, 10)
-
-  var imgRock = $("<img>")
-  imgRock.attr("src","img/rock.png")
-  imgRock.css("width", "200px")
-  imgRock.css("height", "200px") 
-
-  var imgScissors = $("<img>")
-  imgScissors.attr("src","img/scissors.png")
-  imgScissors.css("width", "200px")
-  imgScissors.css("height", "200px") 
-
-  var imgPaper = $("<img>")
-  imgPaper.attr("src","img/paper.png")
-  imgPaper.css("width", "200px")
-  imgPaper.css("height", "200px") 
-
-  if(randum === 0){
-    $("#cpu").html("")
-    $("#cpu").append(imgRock)
-    var resultUser = numUser + 1
-    userSc.textContent = resultUser
-    console.log("YouWin")
-    $("#fruits_1").html("YouWin")
-  } else if(randum === 1){
-    $("#cpu").html("")
-    $("#cpu").append(imgScissors)
-    var resultCpu = numCpu + 1
-    cpuSc.textContent = resultCpu
-    console.log("YouLose")
-    $("#fruits_1").html("YouLose")
-  } else if(randum === 2){
-    $("#cpu").html("")
-    $("#cpu").append(imgPaper)
-    console.log("Drow")
-    $("#fruits_1").html("Drow")
-  }
-})
+$("#paper").on("click", generateRSPProcedure(PAPER))
 
 //リセットのボタンを押した場合
 $("#reset").on("click", function(){
   //対象クラスを持つh1を習得する
   var userSc = document.querySelector('.score_User')
   var cpuSc = document.querySelector('.score_Cpu')
-  // 対象クラスの文字を習得する
-  var stringNumUser = userSc.textContent
-  var stringNumCpu = cpuSc.textContent
-  // 文字を数字化する
-  var numUser = parseInt(stringNumUser, 10)
-  var numCpu = parseInt(stringNumCpu, 10)
 
-  var resultUser = numUser * 0
-  var resultCpu = numCpu * 0
-
-  userSc.textContent = resultUser
-  cpuSc.textContent = resultCpu
+  winCount = loseCount = 0
+  
+  userSc.textContent = winCount
+  cpuSc.textContent = loseCount
 
   $("#fruits_1").html("結果はこちら")
   $("#cpu").trigger("reset");
+
+  $(".result-hand")
+        .css("visibility", "hidden")
+  $(".animation_container").css("visibility", "unset");
 
   alert("リセット完了")
 
   console.log("リセット完了")
 })
-
-
-
-// var scoreTable = {
-//   rock: 0
-//   scissors: 1
-//   paper: 3
-// }
